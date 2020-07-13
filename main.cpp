@@ -1,12 +1,11 @@
-//! @PROJECT_NAME BatExcel
-//! @PROJECT_BRIEF Working with positions
-
 #include <iostream>
 #include <string>
+#include <fstream>
 using std::string;
 using std::cout;
 using std::endl;
 using std::cin;
+using namespace std;
 
 /*!
     \brief Parent class. Shows inheritance
@@ -62,6 +61,12 @@ public:
         cout << "Position: " << position << endl;
         cout << "Salary: " << salary << endl;
     }
+    int addPosition()
+    {
+        ofstream file("data.txt", ios_base::app);
+        file << name << " " << age << " " << position << " " << salary << "\n";
+        file.close();
+    }
 private:
     string position;
     int salary;
@@ -69,8 +74,6 @@ private:
 
 int main()
 {
-    Emploee work("Denis", 19, "programmer", 35000);
-    work.displayInfo();
     cout << "Welcome to BatExcel" << endl;
     int inputPoint = 1;
     while (inputPoint)
@@ -85,7 +88,20 @@ int main()
         cin >> inputPoint;
         if (inputPoint == 1)
         {
-
+            string nameBuf;
+            int ageBuf;
+            string positionBuf;
+            int salaryBuf;
+            cout << "Input name: ";
+            cin >> nameBuf;
+            cout << "Input age: ";
+            cin >> ageBuf;
+            cout << "Input position: ";
+            cin >> positionBuf;
+            cout << "Input salary: ";
+            cin >> salaryBuf;
+            Emploee emploeeBuf(nameBuf, ageBuf, positionBuf, salaryBuf);
+            emploeeBuf.addPosition();
         }
         else if (inputPoint == 5)
             break;
