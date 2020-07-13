@@ -1,3 +1,6 @@
+//! @PROJECT_NAME BatExcel
+//! @PROJECT_BRIEF Working with positions
+
 #include <iostream>
 #include <string>
 using std::string;
@@ -5,12 +8,24 @@ using std::cout;
 using std::endl;
 using std::cin;
 
+/*!
+    \brief Parent class. Shows inheritance
+
+    Inheritance is shown based on it
+    and working with virtual functions
+*/
 class Person
 {
 public:
     Person(string inName, int inAge): name(inName), age(inAge)
     {
     }
+
+    /*!
+     * \brief display info
+     *
+     * display all argument of class object (name, age)
+     */
     virtual void displayInfo()
     {
         cout << "Name: " << name << endl;
@@ -21,6 +36,12 @@ protected:
     int age;
 };
 
+/*!
+    \brief working with emploees positions
+
+    Main class in program.
+    Adds, deletes, searches, and displays records
+*/
 class Emploee:public Person
 {
 public:
@@ -28,6 +49,12 @@ public:
         Person(inName, inAge), position(inPosition), salary(inSalary)
     {
     }
+
+    /*!
+     * \brief display info
+     *
+     * display all argument of class object (name, age, position, salary)
+     */
     void displayInfo() override
     {
         cout << "Name: " << name << endl;
