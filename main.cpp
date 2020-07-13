@@ -61,16 +61,61 @@ public:
         cout << "Position: " << position << endl;
         cout << "Salary: " << salary << endl;
     }
-    int addPosition()
+
+    /*!
+     * \brief add position to file
+     *
+     * add data of current object to data file
+     */
+    int addRecord()
     {
+        int flag = 1;
+        ifstream f("data.txt");
+        if (!f.is_open())
+            flag = 0;
+        else
+            f.close();
         ofstream file("data.txt", ios_base::app);
-        file << name << " " << age << " " << position << " " << salary << "\n";
+        if (flag)
+            file << "\n";
+        file << name << " " << age << " " << position << " " << salary;
         file.close();
     }
 private:
     string position;
     int salary;
 };
+
+/*!
+ * \brief display all records
+ *
+ * display all record in data file
+ * make warning if file is empty
+ */
+void showAllRecordsEmploee()
+{
+    ifstream file("data.txt");
+    if (!file.is_open())
+        cout << "\nThere are no records to show\n";
+    else
+    {
+        string curName, curPosition, curAge, curSalary;
+        while (file)
+        {
+            file >> curName >> curAge >> curPosition >> curSalary;
+            if(file)
+            {
+                cout << "============================" << endl;
+                cout << "Name: " << curName << endl;
+                cout << "Age: " << curAge << endl;
+                cout << "Position: " << curPosition << endl;
+                cout << "Salary: " << curSalary << endl;
+            }
+        }
+        file.close();
+    }
+}
+
 
 int main()
 {
@@ -84,24 +129,22 @@ int main()
         cout << "3 - show all positions" << endl;
         cout << "4 - find position" << endl;
         cout << "5 - exit BatExcel" << endl;
-        cout << "Input number of your choice: ";
+        cout << "\nInput number of your choice: ";
         cin >> inputPoint;
         if (inputPoint == 1)
         {
-            string nameBuf;
-            int ageBuf;
-            string positionBuf;
-            int salaryBuf;
-            cout << "Input name: ";
-            cin >> nameBuf;
-            cout << "Input age: ";
-            cin >> ageBuf;
-            cout << "Input position: ";
-            cin >> positionBuf;
-            cout << "Input salary: ";
-            cin >> salaryBuf;
+            string nameBuf, positionBuf;
+            int ageBuf, salaryBuf;
+            cout << "Input name: "; cin >> nameBuf;
+            cout << "Input age: "; cin >> ageBuf;
+            cout << "Input position: "; cin >> positionBuf;
+            cout << "Input salary: "; cin >> salaryBuf;
             Emploee emploeeBuf(nameBuf, ageBuf, positionBuf, salaryBuf);
-            emploeeBuf.addPosition();
+            emploeeBuf.addRecord();
+        }
+        if (inputPoint == 3)
+        {
+            showAllRecordsEmploee();
         }
         else if (inputPoint == 5)
             break;
