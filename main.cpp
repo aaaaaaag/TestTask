@@ -67,24 +67,60 @@ public:
      *
      * add data of current object to data file
      */
-    int addRecord()
+    void addRecord()
     {
-        int flag = 1;
-        ifstream f("data.txt");
-        if (!f.is_open())
-            flag = 0;
-        else
-            f.close();
         ofstream file("data.txt", ios_base::app);
-        if (flag)
-            file << "\n";
-        file << name << " " << age << " " << position << " " << salary;
+        file << name << " " << age << " " << position << " " << salary << "\n";
         file.close();
+    }
+    void deleteRecord()
+    {
+        ifstream fileOriginal("data.txt");
+        if (!fileOriginal.is_open())
+            cout << "\nThere are no records\n";
+        else
+        {
+            ofstream fileChange("dataChange.txt");
+            int delCount = 0;
+            string curName, curPosition, curAge, curSalary;
+            while (fileOriginal)
+            {
+                fileOriginal >> curName >> curAge >> curPosition >> curSalary;
+                if (fileOriginal &&
+                    ((curName != name) ||
+                    (curAge != to_string(age)) ||
+                    (curPosition != position) ||
+                    (curSalary != to_string(salary))))
+                {
+                    fileChange << curName << " " << curAge
+                             << " " << curPosition << " " << curSalary << "\n";
+                }
+                else
+                    delCount++;
+            }
+            if (delCount < 2)
+                cout << "\nNo records to delete!\n";
+            fileOriginal.close();
+            fileChange.close();
+
+            ofstream fileOriginal("data.txt");
+            ifstream fileChanged("dataChange.txt");
+            while (fileChanged)
+            {
+                fileChanged >> curName >> curAge >> curPosition >> curSalary;
+                if (fileChanged)
+                    fileOriginal << curName << " " << curAge
+                            << " " << curPosition << " " << curSalary << "\n";
+            }
+            fileOriginal.close();
+            fileChanged.close();
+        }
     }
 private:
     string position;
     int salary;
 };
+
 
 /*!
  * \brief display all records
@@ -116,7 +152,6 @@ void showAllRecordsEmploee()
     }
 }
 
-
 int main()
 {
     cout << "Welcome to BatExcel" << endl;
@@ -142,7 +177,18 @@ int main()
             Emploee emploeeBuf(nameBuf, ageBuf, positionBuf, salaryBuf);
             emploeeBuf.addRecord();
         }
-        if (inputPoint == 3)
+        else if (inputPoint == 2)
+        {
+            string nameBuf, positionBuf;
+            int ageBuf, salaryBuf;
+            cout << "Input name: "; cin >> nameBuf;
+            cout << "Input age: "; cin >> ageBuf;
+            cout << "Input position: "; cin >> positionBuf;
+            cout << "Input salary: "; cin >> salaryBuf;
+            Emploee emploeeBuf(nameBuf, ageBuf, positionBuf, salaryBuf);
+            emploeeBuf.deleteRecord();
+        }
+        else if (inputPoint == 3)
         {
             showAllRecordsEmploee();
         }
