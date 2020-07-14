@@ -40,10 +40,9 @@ protected:
 /*!
     \brief working with emploees positions
 
-    Main class in program.
-    Adds, deletes, searches, and displays records
+    contain object Emploee with name, age, position and salary parameters
 */
-class Emploee:public Person
+class Emploee: private Person
 {
 public:
     Emploee(string inName, int inAge, string inPosition, int inSalary):
@@ -63,66 +62,21 @@ public:
         cout << "Position: " << position << endl;
         cout << "Salary: " << salary << endl;
     }
-
-    /*!
-     * \brief add position to file
-     *
-     * add data of current object to data file
-     */
-    void addRecord()
+    string getName()
     {
-        ofstream file("data.txt", ios_base::app);
-        file << name << " " << age << " " << position << " " << salary << "\n";
-        file.close();
+        return name;
     }
-
-    /*!
-     * \brief delete positions from file
-     *
-     * delete all positions in data file that are similar with input object
-     */
-    void deleteRecord()
+    int getAge()
     {
-        ifstream fileOriginal("data.txt");
-        if (!fileOriginal.is_open())
-            cout << "\nThere are no records\n";
-        else
-        {
-            ofstream fileChange("dataChange.txt");
-            int delCount = 0;
-            string curName, curPosition, curAge, curSalary;
-            while (fileOriginal)
-            {
-                fileOriginal >> curName >> curAge >> curPosition >> curSalary;
-                if (fileOriginal &&
-                    ((curName != name) ||
-                    (curAge != to_string(age)) ||
-                    (curPosition != position) ||
-                    (curSalary != to_string(salary))))
-                {
-                    fileChange << curName << " " << curAge
-                             << " " << curPosition << " " << curSalary << "\n";
-                }
-                else
-                    delCount++;
-            }
-            if (delCount < 2)
-                cout << "\nNo records to delete!\n";
-            fileOriginal.close();
-            fileChange.close();
-
-            ofstream fileOriginal("data.txt");
-            ifstream fileChanged("dataChange.txt");
-            while (fileChanged)
-            {
-                fileChanged >> curName >> curAge >> curPosition >> curSalary;
-                if (fileChanged)
-                    fileOriginal << curName << " " << curAge
-                            << " " << curPosition << " " << curSalary << "\n";
-            }
-            fileOriginal.close();
-            fileChanged.close();
-        }
+        return age;
+    }
+    string getPosition()
+    {
+        return position;
+    }
+    int getSalary()
+    {
+        return salary;
     }
 
 private:
@@ -130,44 +84,21 @@ private:
     int salary;
 };
 
-
 /*!
- * \brief display all records
- *
- * display all record in data file
- * make warning if file is empty
- */
-void showAllRecordsEmploee()
-{
-    ifstream file("data.txt");
-    if (!file.is_open())
-        cout << "\nThere are no records to show\n";
-    else
-    {
-        string curName, curPosition, curAge, curSalary;
-        while (file)
-        {
-            file >> curName >> curAge >> curPosition >> curSalary;
-            if(file)
-            {
-                cout << "============================" << endl;
-                cout << "Name: " << curName << endl;
-                cout << "Age: " << curAge << endl;
-                cout << "Position: " << curPosition << endl;
-                cout << "Salary: " << curSalary << endl;
-            }
-        }
-        file.close();
-    }
-}
+    \brief functions for work with data file Emploees
 
-
+    Contains many functions for editing emploees data file
+    Adds, deletes, searches, and displays records
+*/
 class dataFileSearch
 {
 public:
 
-    dataFileSearch(string str): searchString(str)
+    dataFileSearch(){}
+
+    void setSearchString(string setString)
     {
+        searchString = setString;
     }
 
     void searchRecordByName()
@@ -282,6 +213,98 @@ public:
         }
     }
 
+    /*!
+     * \brief add position to file
+     *
+     * add data of current object to data file
+     */
+    void addRecord(Emploee worker)
+    {
+        ofstream file("data.txt", ios_base::app);
+        file << worker.getName() << " " << worker.getAge() <<
+                " " << worker.getPosition() << " " << worker.getSalary() << "\n";
+        file.close();
+    }
+
+    /*!
+     * \brief display all records
+     *
+     * display all record in data file
+     * make warning if file is empty
+     */
+    void showAllRecordsEmploee()
+    {
+        ifstream file("data.txt");
+        if (!file.is_open())
+            cout << "\nThere are no records to show\n";
+        else
+        {
+            string curName, curPosition, curAge, curSalary;
+            while (file)
+            {
+                file >> curName >> curAge >> curPosition >> curSalary;
+                if(file)
+                {
+                    cout << "============================" << endl;
+                    cout << "Name: " << curName << endl;
+                    cout << "Age: " << curAge << endl;
+                    cout << "Position: " << curPosition << endl;
+                    cout << "Salary: " << curSalary << endl;
+                }
+            }
+            file.close();
+        }
+    }
+
+    /*!
+     * \brief delete positions from file
+     *
+     * delete all positions in data file that are similar with input object
+     */
+    void deleteRecord(Emploee worker)
+    {
+        ifstream fileOriginal("data.txt");
+        if (!fileOriginal.is_open())
+            cout << "\nThere are no records\n";
+        else
+        {
+            ofstream fileChange("dataChange.txt");
+            int delCount = 0;
+            string curName, curPosition, curAge, curSalary;
+            while (fileOriginal)
+            {
+                fileOriginal >> curName >> curAge >> curPosition >> curSalary;
+                if (fileOriginal &&
+                    ((curName != worker.getName()) ||
+                    (curAge != to_string(worker.getAge())) ||
+                    (curPosition != worker.getPosition()) ||
+                    (curSalary != to_string(worker.getSalary()))))
+                {
+                    fileChange << curName << " " << curAge
+                             << " " << curPosition << " " << curSalary << "\n";
+                }
+                else
+                    delCount++;
+            }
+            if (delCount < 2)
+                cout << "\nNo records to delete!\n";
+            fileOriginal.close();
+            fileChange.close();
+
+            ofstream fileOriginal("data.txt");
+            ifstream fileChanged("dataChange.txt");
+            while (fileChanged)
+            {
+                fileChanged >> curName >> curAge >> curPosition >> curSalary;
+                if (fileChanged)
+                    fileOriginal << curName << " " << curAge
+                            << " " << curPosition << " " << curSalary << "\n";
+            }
+            fileOriginal.close();
+            fileChanged.close();
+        }
+    }
+
 private:
     string searchString;
 };
@@ -308,8 +331,9 @@ int main()
             cout << "Input age: "; cin >> ageBuf;
             cout << "Input position: "; cin >> positionBuf;
             cout << "Input salary: "; cin >> salaryBuf;
-            Emploee emploeeBuf(nameBuf, ageBuf, positionBuf, salaryBuf);
-            emploeeBuf.addRecord();
+            Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
+            dataFileSearch dataFile;
+            dataFile.addRecord(worker);
         }
         else if (inputPoint == "2")
         {
@@ -319,16 +343,19 @@ int main()
             cout << "Input age: "; cin >> ageBuf;
             cout << "Input position: "; cin >> positionBuf;
             cout << "Input salary: "; cin >> salaryBuf;
-            Emploee emploeeBuf(nameBuf, ageBuf, positionBuf, salaryBuf);
-            emploeeBuf.deleteRecord();
+            Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
+            dataFileSearch dataFile;
+            dataFile.deleteRecord(worker);
         }
         else if (inputPoint == "3")
         {
-            showAllRecordsEmploee();
+            dataFileSearch dataFile;
+            dataFile.showAllRecordsEmploee();
         }
         else if (inputPoint == "4")
         {
-            string inputString, inputPointStr;
+            string inputString;
+            char inputPointStr;
             do
             {
                 cout << "\nInput number by that you will search records\n";
@@ -337,24 +364,25 @@ int main()
                 cout << "3 - Position" << endl;
                 cout << "4 - Salary" << endl;
                 cout << "Number: "; cin >> inputPointStr;
-                if (inputPointStr != ("1", "2", "3", "4"))
+                if ((inputPointStr != '1') && (inputPointStr != '2') &&
+                        (inputPointStr != '3') && (inputPointStr != '4'))
                     cout << "\nERROR INPUT\n";
             }
-            while (inputPointStr != ("1", "2", "3", "4"));
+            while ((inputPointStr != '1') && (inputPointStr != '2') &&
+                   (inputPointStr != '3') && (inputPointStr != '4'));
 
             cout << "Input string: "; cin >> inputString;
-            dataFileSearch dataFile(inputString);
-            if (inputPoint == "1")
+            dataFileSearch dataFile;
+            dataFile.setSearchString(inputString);
+            if (inputPointStr == '1')
                 dataFile.searchRecordByName();
-            else if (inputPoint == "2")
+            else if (inputPointStr == '2')
                 dataFile.searchRecordByAge();
-            else if (inputPoint == "3")
+            else if (inputPointStr == '3')
                 dataFile.searchRecordByPosition();
-            else if (inputPoint == "4")
+            else if (inputPointStr == '4')
                 dataFile.searchRecordBySalary();
         }
-        else if (inputPoint == "5")
-            break;
     }
     return 0;
 }
