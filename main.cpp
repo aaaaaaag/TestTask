@@ -2,10 +2,7 @@
 #include <string>
 #include <fstream>
 #include <cstring>
-using std::string;
-using std::cout;
-using std::endl;
-using std::cin;
+
 using namespace std;
 
 /*!
@@ -62,6 +59,7 @@ public:
         cout << "Position: " << position << endl;
         cout << "Salary: " << salary << endl;
     }
+
     string getName()
     {
         return name;
@@ -101,6 +99,9 @@ public:
         searchString = setString;
     }
 
+    /*!
+     * \brief finds entries based on the entered name
+     */
     void searchRecordByName()
     {
         ifstream file("data.txt");
@@ -129,6 +130,9 @@ public:
         }
     }
 
+    /*!
+     * \brief finds entries based on the entered age
+     */
     void searchRecordByAge()
     {
         ifstream file("data.txt");
@@ -157,6 +161,9 @@ public:
         }
     }
 
+    /*!
+     * \brief finds entries based on the entered position
+     */
     void searchRecordByPosition()
     {
         ifstream file("data.txt");
@@ -185,6 +192,9 @@ public:
         }
     }
 
+    /*!
+     * \brief finds entries based on the entered salary
+     */
     void searchRecordBySalary()
     {
         ifstream file("data.txt");
@@ -306,13 +316,13 @@ public:
     }
 
 private:
-    string searchString;
+    string searchString;///<The substring to search for in the file
 };
 
 int main()
 {
     cout << "Welcome to BatExcel" << endl;
-    string inputPoint = "1";
+    string inputPoint = "1"; ///<///<Digit in menu entered by the user
     while (inputPoint != "5")
     {
         cout << "____________________________" << endl;
@@ -323,6 +333,9 @@ int main()
         cout << "5 - exit BatExcel" << endl;
         cout << "\nInput number of your choice: ";
         cin >> inputPoint;
+        /*!
+            \brief  Implementation of all actions depending on the selected number
+        */
         if (inputPoint == "1")
         {
             string nameBuf, positionBuf;
@@ -354,8 +367,11 @@ int main()
         }
         else if (inputPoint == "4")
         {
-            string inputString;
-            char inputPointStr;
+            string inputString;///<String entered by the user
+            char inputPointStr;///<Digit entered by the user
+            /*!
+                \brief loop until the user enters the desired number
+            */
             do
             {
                 cout << "\nInput number by that you will search records\n";
