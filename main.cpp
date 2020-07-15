@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <cstring>
-
+#include <cstdlib>
 using namespace std;
 
 /*!
@@ -77,251 +77,252 @@ public:
         return salary;
     }
 
+
+    /*!
+        \brief functions for work with data file Emploees
+
+        Contains many functions for editing emploees data file
+        Adds, deletes, searches, and displays records
+    */
+    class dataFileSearch
+    {
+    public:
+
+        dataFileSearch(){}
+
+        void setSearchString(string setString)
+        {
+            searchString = setString;
+        }
+
+        /*!
+         * \brief finds entries based on the entered name
+         */
+        void searchRecordByName()
+        {
+            ifstream file("data.txt");
+            if (!file.is_open())
+                cout << "\nThere are no records to show\n";
+            else
+            {
+                string curName, curPosition, curAge, curSalary;
+                int countIsSimilar = 0;
+                while (file)
+                {
+                    file >> curName >> curAge >> curPosition >> curSalary;
+                    if (file && (curName.find(searchString, 0) == 0))
+                    {
+                        countIsSimilar++;
+                        cout << "============================" << endl;
+                        cout << "Name: " << curName << endl;
+                        cout << "Age: " << curAge << endl;
+                        cout << "Position: " << curPosition << endl;
+                        cout << "Salary: " << curSalary << endl;
+                    }
+                }
+                if (countIsSimilar == 0)
+                    cout << "\nNo matches\n";
+                file.close();
+            }
+        }
+
+        /*!
+         * \brief finds entries based on the entered age
+         */
+        void searchRecordByAge()
+        {
+            ifstream file("data.txt");
+            if (!file.is_open())
+                cout << "\nThere are no records to show\n";
+            else
+            {
+                string curName, curPosition, curAge, curSalary;
+                int countIsSimilar = 0;
+                while (file)
+                {
+                    file >> curName >> curAge >> curPosition >> curSalary;
+                    if (file && (curAge.find(searchString, 0) == 0))
+                    {
+                        countIsSimilar++;
+                        cout << "============================" << endl;
+                        cout << "Name: " << curName << endl;
+                        cout << "Age: " << curAge << endl;
+                        cout << "Position: " << curPosition << endl;
+                        cout << "Salary: " << curSalary << endl;
+                    }
+                }
+                if (countIsSimilar == 0)
+                    cout << "\nNo matches\n";
+                file.close();
+            }
+        }
+
+        /*!
+         * \brief finds entries based on the entered position
+         */
+        void searchRecordByPosition()
+        {
+            ifstream file("data.txt");
+            if (!file.is_open())
+                cout << "\nThere are no records to show\n";
+            else
+            {
+                string curName, curPosition, curAge, curSalary;
+                int countIsSimilar = 0;
+                while (file)
+                {
+                    file >> curName >> curAge >> curPosition >> curSalary;
+                    if (file && (curPosition.find(searchString, 0) == 0))
+                    {
+                        countIsSimilar++;
+                        cout << "============================" << endl;
+                        cout << "Name: " << curName << endl;
+                        cout << "Age: " << curAge << endl;
+                        cout << "Position: " << curPosition << endl;
+                        cout << "Salary: " << curSalary << endl;
+                    }
+                }
+                if (countIsSimilar == 0)
+                    cout << "\nNo matches\n";
+                file.close();
+            }
+        }
+
+        /*!
+         * \brief finds entries based on the entered salary
+         */
+        void searchRecordBySalary()
+        {
+            ifstream file("data.txt");
+            if (!file.is_open())
+                cout << "\nThere are no records to show\n";
+            else
+            {
+                string curName, curPosition, curAge, curSalary;
+                int countIsSimilar = 0;
+                while (file)
+                {
+                    file >> curName >> curAge >> curPosition >> curSalary;
+                    if (file && (curSalary.find(searchString, 0) == 0))
+                    {
+                        countIsSimilar++;
+                        cout << "============================" << endl;
+                        cout << "Name: " << curName << endl;
+                        cout << "Age: " << curAge << endl;
+                        cout << "Position: " << curPosition << endl;
+                        cout << "Salary: " << curSalary << endl;
+                    }
+                }
+                if (countIsSimilar == 0)
+                    cout << "\nNo matches\n";
+                file.close();
+            }
+        }
+
+        /*!
+         * \brief add position to file
+         *
+         * add data of current object to data file
+         */
+        void addRecord(Emploee worker)
+        {
+            ofstream file("data.txt", ios_base::app);
+            file << worker.getName() << " " << worker.getAge() <<
+                    " " << worker.getPosition() << " " << worker.getSalary() << "\n";
+            file.close();
+        }
+
+        /*!
+         * \brief display all records
+         *
+         * display all record in data file
+         * make warning if file is empty
+         */
+        void showAllRecordsEmploee()
+        {
+            ifstream file("data.txt");
+            if (!file.is_open())
+                cout << "\nThere are no records to show\n";
+            else
+            {
+                string curName, curPosition, curAge, curSalary;
+                while (file)
+                {
+                    file >> curName >> curAge >> curPosition >> curSalary;
+                    if(file)
+                    {
+                        cout << "============================" << endl;
+                        cout << "Name: " << curName << endl;
+                        cout << "Age: " << curAge << endl;
+                        cout << "Position: " << curPosition << endl;
+                        cout << "Salary: " << curSalary << endl;
+                    }
+                }
+                file.close();
+            }
+        }
+
+        /*!
+         * \brief delete positions from file
+         *
+         * delete all positions in data file that are similar with input object
+         */
+        void deleteRecord(Emploee worker)
+        {
+            ifstream fileOriginal("data.txt");
+            if (!fileOriginal.is_open())
+                cout << "\nThere are no records\n";
+            else
+            {
+                ofstream fileChange("dataChange.txt");
+                int delCount = 0;
+                string curName, curPosition, curAge, curSalary;
+                while (fileOriginal)
+                {
+                    fileOriginal >> curName >> curAge >> curPosition >> curSalary;
+                    if (fileOriginal &&
+                        ((curName != worker.getName()) ||
+                        (curAge != to_string(worker.getAge())) ||
+                        (curPosition != worker.getPosition()) ||
+                        (curSalary != to_string(worker.getSalary()))))
+                    {
+                        fileChange << curName << " " << curAge
+                                 << " " << curPosition << " " << curSalary << "\n";
+                    }
+                    else
+                        delCount++;
+                }
+                if (delCount < 2)
+                    cout << "\nNo records to delete!\n";
+                fileOriginal.close();
+                fileChange.close();
+
+                ofstream fileOriginal("data.txt");
+                ifstream fileChanged("dataChange.txt");
+                while (fileChanged)
+                {
+                    fileChanged >> curName >> curAge >> curPosition >> curSalary;
+                    if (fileChanged)
+                        fileOriginal << curName << " " << curAge
+                                << " " << curPosition << " " << curSalary << "\n";
+                }
+                fileOriginal.close();
+                fileChanged.close();
+            }
+        }
+
+    private:
+        string searchString;///<The substring to search for in the file
+    };
+
 private:
     string position;
     int salary;
 };
 
-/*!
-    \brief functions for work with data file Emploees
-
-    Contains many functions for editing emploees data file
-    Adds, deletes, searches, and displays records
-*/
-class dataFileSearch
-{
-public:
-
-    dataFileSearch(){}
-
-    void setSearchString(string setString)
-    {
-        searchString = setString;
-    }
-
-    /*!
-     * \brief finds entries based on the entered name
-     */
-    void searchRecordByName()
-    {
-        ifstream file("data.txt");
-        if (!file.is_open())
-            cout << "\nThere are no records to show\n";
-        else
-        {
-            string curName, curPosition, curAge, curSalary;
-            int countIsSimilar = 0;
-            while (file)
-            {
-                file >> curName >> curAge >> curPosition >> curSalary;
-                if (file && (curName.find(searchString, 0) == 0))
-                {
-                    countIsSimilar++;
-                    cout << "============================" << endl;
-                    cout << "Name: " << curName << endl;
-                    cout << "Age: " << curAge << endl;
-                    cout << "Position: " << curPosition << endl;
-                    cout << "Salary: " << curSalary << endl;
-                }
-            }
-            if (countIsSimilar == 0)
-                cout << "\nNo matches\n";
-            file.close();
-        }
-    }
-
-    /*!
-     * \brief finds entries based on the entered age
-     */
-    void searchRecordByAge()
-    {
-        ifstream file("data.txt");
-        if (!file.is_open())
-            cout << "\nThere are no records to show\n";
-        else
-        {
-            string curName, curPosition, curAge, curSalary;
-            int countIsSimilar = 0;
-            while (file)
-            {
-                file >> curName >> curAge >> curPosition >> curSalary;
-                if (file && (curAge.find(searchString, 0) == 0))
-                {
-                    countIsSimilar++;
-                    cout << "============================" << endl;
-                    cout << "Name: " << curName << endl;
-                    cout << "Age: " << curAge << endl;
-                    cout << "Position: " << curPosition << endl;
-                    cout << "Salary: " << curSalary << endl;
-                }
-            }
-            if (countIsSimilar == 0)
-                cout << "\nNo matches\n";
-            file.close();
-        }
-    }
-
-    /*!
-     * \brief finds entries based on the entered position
-     */
-    void searchRecordByPosition()
-    {
-        ifstream file("data.txt");
-        if (!file.is_open())
-            cout << "\nThere are no records to show\n";
-        else
-        {
-            string curName, curPosition, curAge, curSalary;
-            int countIsSimilar = 0;
-            while (file)
-            {
-                file >> curName >> curAge >> curPosition >> curSalary;
-                if (file && (curPosition.find(searchString, 0) == 0))
-                {
-                    countIsSimilar++;
-                    cout << "============================" << endl;
-                    cout << "Name: " << curName << endl;
-                    cout << "Age: " << curAge << endl;
-                    cout << "Position: " << curPosition << endl;
-                    cout << "Salary: " << curSalary << endl;
-                }
-            }
-            if (countIsSimilar == 0)
-                cout << "\nNo matches\n";
-            file.close();
-        }
-    }
-
-    /*!
-     * \brief finds entries based on the entered salary
-     */
-    void searchRecordBySalary()
-    {
-        ifstream file("data.txt");
-        if (!file.is_open())
-            cout << "\nThere are no records to show\n";
-        else
-        {
-            string curName, curPosition, curAge, curSalary;
-            int countIsSimilar = 0;
-            while (file)
-            {
-                file >> curName >> curAge >> curPosition >> curSalary;
-                if (file && (curSalary.find(searchString, 0) == 0))
-                {
-                    countIsSimilar++;
-                    cout << "============================" << endl;
-                    cout << "Name: " << curName << endl;
-                    cout << "Age: " << curAge << endl;
-                    cout << "Position: " << curPosition << endl;
-                    cout << "Salary: " << curSalary << endl;
-                }
-            }
-            if (countIsSimilar == 0)
-                cout << "\nNo matches\n";
-            file.close();
-        }
-    }
-
-    /*!
-     * \brief add position to file
-     *
-     * add data of current object to data file
-     */
-    void addRecord(Emploee worker)
-    {
-        ofstream file("data.txt", ios_base::app);
-        file << worker.getName() << " " << worker.getAge() <<
-                " " << worker.getPosition() << " " << worker.getSalary() << "\n";
-        file.close();
-    }
-
-    /*!
-     * \brief display all records
-     *
-     * display all record in data file
-     * make warning if file is empty
-     */
-    void showAllRecordsEmploee()
-    {
-        ifstream file("data.txt");
-        if (!file.is_open())
-            cout << "\nThere are no records to show\n";
-        else
-        {
-            string curName, curPosition, curAge, curSalary;
-            while (file)
-            {
-                file >> curName >> curAge >> curPosition >> curSalary;
-                if(file)
-                {
-                    cout << "============================" << endl;
-                    cout << "Name: " << curName << endl;
-                    cout << "Age: " << curAge << endl;
-                    cout << "Position: " << curPosition << endl;
-                    cout << "Salary: " << curSalary << endl;
-                }
-            }
-            file.close();
-        }
-    }
-
-    /*!
-     * \brief delete positions from file
-     *
-     * delete all positions in data file that are similar with input object
-     */
-    void deleteRecord(Emploee worker)
-    {
-        ifstream fileOriginal("data.txt");
-        if (!fileOriginal.is_open())
-            cout << "\nThere are no records\n";
-        else
-        {
-            ofstream fileChange("dataChange.txt");
-            int delCount = 0;
-            string curName, curPosition, curAge, curSalary;
-            while (fileOriginal)
-            {
-                fileOriginal >> curName >> curAge >> curPosition >> curSalary;
-                if (fileOriginal &&
-                    ((curName != worker.getName()) ||
-                    (curAge != to_string(worker.getAge())) ||
-                    (curPosition != worker.getPosition()) ||
-                    (curSalary != to_string(worker.getSalary()))))
-                {
-                    fileChange << curName << " " << curAge
-                             << " " << curPosition << " " << curSalary << "\n";
-                }
-                else
-                    delCount++;
-            }
-            if (delCount < 2)
-                cout << "\nNo records to delete!\n";
-            fileOriginal.close();
-            fileChange.close();
-
-            ofstream fileOriginal("data.txt");
-            ifstream fileChanged("dataChange.txt");
-            while (fileChanged)
-            {
-                fileChanged >> curName >> curAge >> curPosition >> curSalary;
-                if (fileChanged)
-                    fileOriginal << curName << " " << curAge
-                            << " " << curPosition << " " << curSalary << "\n";
-            }
-            fileOriginal.close();
-            fileChanged.close();
-        }
-    }
-
-private:
-    string searchString;///<The substring to search for in the file
-};
-
 int main()
 {
-    cout << "Welcome to BatExcel" << endl;
+    cout << "Welcome to BatExce l" << atoi("213") << endl;
     string inputPoint = "1"; ///<///<Digit in menu entered by the user
     while (inputPoint != "5")
     {
@@ -345,7 +346,7 @@ int main()
             cout << "Input position: "; cin >> positionBuf;
             cout << "Input salary: "; cin >> salaryBuf;
             Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
-            dataFileSearch dataFile;
+            Emploee::dataFileSearch dataFile;
             dataFile.addRecord(worker);
         }
         else if (inputPoint == "2")
@@ -357,12 +358,12 @@ int main()
             cout << "Input position: "; cin >> positionBuf;
             cout << "Input salary: "; cin >> salaryBuf;
             Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
-            dataFileSearch dataFile;
+            Emploee::dataFileSearch dataFile;
             dataFile.deleteRecord(worker);
         }
         else if (inputPoint == "3")
         {
-            dataFileSearch dataFile;
+            Emploee::dataFileSearch dataFile;
             dataFile.showAllRecordsEmploee();
         }
         else if (inputPoint == "4")
@@ -388,7 +389,7 @@ int main()
                    (inputPointStr != '3') && (inputPointStr != '4'));
 
             cout << "Input string: "; cin >> inputString;
-            dataFileSearch dataFile;
+            Emploee::dataFileSearch dataFile;
             dataFile.setSearchString(inputString);
             if (inputPointStr == '1')
                 dataFile.searchRecordByName();
@@ -399,6 +400,8 @@ int main()
             else if (inputPointStr == '4')
                 dataFile.searchRecordBySalary();
         }
+        else if (inputPoint != "5")
+            cout << "\nIncorrect input" << endl;
     }
     return 0;
 }
