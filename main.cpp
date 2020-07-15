@@ -320,9 +320,60 @@ private:
     int salary;
 };
 
+
+/*!
+ * \brief detect can string be
+ *
+ * delete all positions in data file that are similar with input object
+ */
+int makeStringDigit(string str, int *intStr)
+{
+    *intStr = 0;
+    int discharge = 1, isDigit = 1, i = 0;
+    for (i = 0; str[i] != '\0', discharge < 1000000; i++)
+    {
+        if (str[i] == '1')
+            *intStr += 1 * discharge;
+        else if (str[i] == '2')
+            *intStr += 2 * discharge;
+        else if (str[i] == '3')
+            *intStr += 3 * discharge;
+        else if (str[i] == '4')
+            *intStr += 4 * discharge;
+        else if (str[i] == '5')
+            *intStr += 5 * discharge;
+        else if (str[i] == '6')
+            *intStr += 6 * discharge;
+        else if (str[i] == '7')
+            *intStr += 7 * discharge;
+        else if (str[i] == '8')
+            *intStr += 8 * discharge;
+        else if (str[i] == '9')
+            *intStr += 9 * discharge;
+        else if (str[i] == '0')
+            *intStr += 10 * discharge;
+        else if (str[i] != '\0')
+        {
+            isDigit = 0;
+            break;
+        }
+        discharge *= 10;
+        //cout << endl << *intStr << endl;
+    }
+    if (isDigit == 1)
+    {
+        if (discharge >= 1000000)
+                return -1;
+        return 1;
+    }
+    else if (isDigit == 0)
+        return 0;
+}
+
 int main()
 {
-    cout << "Welcome to BatExce l" << atoi("213") << endl;
+    int term;
+    cout << "Welcome to BatExcel " << makeStringDigit("-123", &term) << " " << term << endl;
     string inputPoint = "1"; ///<///<Digit in menu entered by the user
     while (inputPoint != "5")
     {
@@ -345,9 +396,11 @@ int main()
             cout << "Input age: "; cin >> ageBuf;
             cout << "Input position: "; cin >> positionBuf;
             cout << "Input salary: "; cin >> salaryBuf;
+
             Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
             Emploee::dataFileSearch dataFile;
             dataFile.addRecord(worker);
+
         }
         else if (inputPoint == "2")
         {
