@@ -6,6 +6,17 @@
 using namespace std;
 
 /*!
+ * \brief detect can string be int and do it
+ *
+ * try to make int from string. Do it if can. return error code
+ * error codes
+ * 1 - OK. make int from string
+ * -1 - too long number in string
+ * 0 - string contain not digit symbol
+ */
+int makeStringDigit(string str, int *intStr);
+
+/*!
     \brief Parent class. Shows inheritance
 
     Inheritance is shown based on it
@@ -129,7 +140,7 @@ public:
         /*!
          * \brief finds entries based on the entered age
          */
-        void searchRecordByAge()
+        void searchRecordByAge(int startArea, int endArea)
         {
             ifstream file("data.txt");
             if (!file.is_open())
@@ -137,11 +148,13 @@ public:
             else
             {
                 string curName, curPosition, curAge, curSalary;
-                int countIsSimilar = 0;
+                int countIsSimilar = 0, curAgeInt;
                 while (file)
                 {
                     file >> curName >> curAge >> curPosition >> curSalary;
-                    if (file && (curAge.find(searchString, 0) == 0))
+
+                    if (file && (makeStringDigit(curAge, &curAgeInt)) &&
+                            (curAgeInt >= startArea) && (curAgeInt <= endArea))
                     {
                         countIsSimilar++;
                         cout << "============================" << endl;
@@ -191,7 +204,7 @@ public:
         /*!
          * \brief finds entries based on the entered salary
          */
-        void searchRecordBySalary()
+        void searchRecordBySalary(int startArea, int endArea)
         {
             ifstream file("data.txt");
             if (!file.is_open())
@@ -199,11 +212,13 @@ public:
             else
             {
                 string curName, curPosition, curAge, curSalary;
-                int countIsSimilar = 0;
+                int countIsSimilar = 0, curSalaryInt;
                 while (file)
                 {
                     file >> curName >> curAge >> curPosition >> curSalary;
-                    if (file && (curSalary.find(searchString, 0) == 0))
+
+                    if (file && (makeStringDigit(curSalary, &curSalaryInt)) &&
+                            (curSalaryInt >= startArea) && (curSalaryInt <= endArea))
                     {
                         countIsSimilar++;
                         cout << "============================" << endl;
@@ -320,62 +335,6 @@ private:
     int salary;
 };
 
-
-/*!
- * \brief detect can string be int and do it
- *
- * try to make int from string. Do it if can. return error code
- * error codes
- * 1 - OK. make int from string
- * -1 - too long number in string
- * 0 - string contain not digit symbol
- */
-int makeStringDigit(string str, int *intStr)
-{
-    *intStr = 0;
-    int discharge = 1, isDigit = 1, i = 0;
-    //cout << endl << str.length() <<endl;
-    for (i = str.length() - 1; (i >= 0 && discharge < 1000000); i--)
-    {
-        if (str[i] == '1')
-            *intStr += 1 * discharge;
-        else if (str[i] == '2')
-            *intStr += 2 * discharge;
-        else if (str[i] == '3')
-            *intStr += 3 * discharge;
-        else if (str[i] == '4')
-            *intStr += 4 * discharge;
-        else if (str[i] == '5')
-            *intStr += 5 * discharge;
-        else if (str[i] == '6')
-            *intStr += 6 * discharge;
-        else if (str[i] == '7')
-            *intStr += 7 * discharge;
-        else if (str[i] == '8')
-            *intStr += 8 * discharge;
-        else if (str[i] == '9')
-            *intStr += 9 * discharge;
-        else if (str[i] == '0')
-            *intStr += 0 * discharge;
-        else
-        {
-            //cout <<endl<< str[i] << endl;
-            isDigit = 0;
-            break;
-        }
-        discharge *= 10;
-        //cout << endl << str[i] << endl;
-    }
-    if (isDigit == 1)
-    {
-        if (discharge >= 1000000)
-                return -1;
-        return 1;
-    }
-    else if (isDigit == 0)
-        return 0;
-}
-
 int main()
 {
     cout << "Welcome to BatExcel " << endl;
@@ -491,20 +450,135 @@ int main()
             while ((inputPointStr != '1') && (inputPointStr != '2') &&
                    (inputPointStr != '3') && (inputPointStr != '4'));
 
-            cout << "Input string: "; cin >> inputString;
             Emploee::dataFileSearch dataFile;
-            dataFile.setSearchString(inputString);
             if (inputPointStr == '1')
+            {
+                cout << "Input string: "; cin >> inputString;
+                dataFile.setSearchString(inputString);
                 dataFile.searchRecordByName();
+            }
             else if (inputPointStr == '2')
-                dataFile.searchRecordByAge();
+            {
+                int startArea, endArea, errorFlag;
+                string strStartArea, strEndArea;
+                do
+                {
+                    cout << "Input start of area age: "; cin >> strStartArea;
+                    errorFlag = makeStringDigit(strStartArea, &startArea);
+                    if (errorFlag == -1)
+                        cout << "\nToo long number\n";
+                    else if (errorFlag == 0)
+                        cout << "\nError input\n";
+                }
+                while (errorFlag != 1);
+
+                do
+                {
+                    cout << "Input end of area age: "; cin >> strEndArea;
+                    errorFlag = makeStringDigit(strEndArea, &endArea);
+                    if (errorFlag == -1)
+                        cout << "\nToo long number\n";
+                    else if (errorFlag == 0)
+                        cout << "\nError input\n";
+                    if ((errorFlag == 1) && (endArea < startArea))
+                    {
+                        errorFlag = 2;
+                        cout << "Wrong area (end of search < start search)" << endl;
+                    }
+                }
+                while (errorFlag != 1);
+
+                dataFile.searchRecordByAge(startArea, endArea);
+            }
             else if (inputPointStr == '3')
+            {
+                cout << "Input string: "; cin >> inputString;
+                dataFile.setSearchString(inputString);
                 dataFile.searchRecordByPosition();
+            }
             else if (inputPointStr == '4')
-                dataFile.searchRecordBySalary();
+            {
+                int startArea, endArea, errorFlag;
+                string strStartArea, strEndArea;
+                do
+                {
+                    cout << "Input start of area salary: "; cin >> strStartArea;
+                    errorFlag = makeStringDigit(strStartArea, &startArea);
+                    if (errorFlag == -1)
+                        cout << "\nToo long number\n";
+                    else if (errorFlag == 0)
+                        cout << "\nError input\n";
+                }
+                while (errorFlag != 1);
+
+                do
+                {
+                    cout << "Input end of area salary: "; cin >> strEndArea;
+                    errorFlag = makeStringDigit(strEndArea, &endArea);
+                    if (errorFlag == -1)
+                        cout << "\nToo long number\n";
+                    else if (errorFlag == 0)
+                        cout << "\nError input\n";
+                    if ((errorFlag == 1) && (endArea < startArea))
+                    {
+                        errorFlag = 2;
+                        cout << "Wrong area (end of search < start search)" << endl;
+                    }
+                }
+                while (errorFlag != 1);
+
+                dataFile.searchRecordBySalary(startArea, endArea);
+            }
         }
         else if (inputPoint != "5")
             cout << "\nIncorrect input" << endl;
     }
     return 0;
+}
+
+
+int makeStringDigit(string str, int *intStr)
+{
+    *intStr = 0;
+    int discharge = 1, isDigit = 1, i = 0;
+    //cout << endl << str.length() <<endl;
+    for (i = str.length() - 1; (i >= 0 && discharge < 1000000); i--)
+    {
+        if (str[i] == '1')
+            *intStr += 1 * discharge;
+        else if (str[i] == '2')
+            *intStr += 2 * discharge;
+        else if (str[i] == '3')
+            *intStr += 3 * discharge;
+        else if (str[i] == '4')
+            *intStr += 4 * discharge;
+        else if (str[i] == '5')
+            *intStr += 5 * discharge;
+        else if (str[i] == '6')
+            *intStr += 6 * discharge;
+        else if (str[i] == '7')
+            *intStr += 7 * discharge;
+        else if (str[i] == '8')
+            *intStr += 8 * discharge;
+        else if (str[i] == '9')
+            *intStr += 9 * discharge;
+        else if (str[i] == '0')
+            *intStr += 0 * discharge;
+        else
+        {
+            //cout <<endl<< str[i] << endl;
+            isDigit = 0;
+            break;
+        }
+        discharge *= 10;
+        //cout << endl << str[i] << endl;
+    }
+    if (isDigit == 1)
+    {
+        if (discharge >= 1000000)
+                return -1;
+        return 1;
+    }
+    else if (isDigit == 0)
+        return 0;
 }
