@@ -322,15 +322,20 @@ private:
 
 
 /*!
- * \brief detect can string be
+ * \brief detect can string be int and do it
  *
- * delete all positions in data file that are similar with input object
+ * try to make int from string. Do it if can. return error code
+ * error codes
+ * 1 - OK. make int from string
+ * -1 - too long number in string
+ * 0 - string contain not digit symbol
  */
 int makeStringDigit(string str, int *intStr)
 {
     *intStr = 0;
     int discharge = 1, isDigit = 1, i = 0;
-    for (i = 0; str[i] != '\0', discharge < 1000000; i++)
+    //cout << endl << str.length() <<endl;
+    for (i = str.length() - 1; (i >= 0 && discharge < 1000000); i--)
     {
         if (str[i] == '1')
             *intStr += 1 * discharge;
@@ -351,14 +356,15 @@ int makeStringDigit(string str, int *intStr)
         else if (str[i] == '9')
             *intStr += 9 * discharge;
         else if (str[i] == '0')
-            *intStr += 10 * discharge;
-        else if (str[i] != '\0')
+            *intStr += 0 * discharge;
+        else
         {
+            //cout <<endl<< str[i] << endl;
             isDigit = 0;
             break;
         }
         discharge *= 10;
-        //cout << endl << *intStr << endl;
+        //cout << endl << str[i] << endl;
     }
     if (isDigit == 1)
     {
@@ -372,8 +378,7 @@ int makeStringDigit(string str, int *intStr)
 
 int main()
 {
-    int term;
-    cout << "Welcome to BatExcel " << makeStringDigit("-123", &term) << " " << term << endl;
+    cout << "Welcome to BatExcel " << endl;
     string inputPoint = "1"; ///<///<Digit in menu entered by the user
     while (inputPoint != "5")
     {
@@ -390,12 +395,34 @@ int main()
         */
         if (inputPoint == "1")
         {
-            string nameBuf, positionBuf;
-            int ageBuf, salaryBuf;
+            string nameBuf, positionBuf, strAgeBuf, strSalaryBuf;
+            int ageBuf = 0, salaryBuf = 0, errorFlag;
+
             cout << "Input name: "; cin >> nameBuf;
-            cout << "Input age: "; cin >> ageBuf;
+
+            do
+            {
+                cout << "Input age: "; cin >> strAgeBuf;
+                errorFlag = makeStringDigit(strAgeBuf, &ageBuf);
+                if (errorFlag == -1)
+                    cout << "\nToo long number\n";
+                else if (errorFlag == 0)
+                    cout << "\nError input\n";
+            }
+            while (errorFlag != 1);
+
             cout << "Input position: "; cin >> positionBuf;
-            cout << "Input salary: "; cin >> salaryBuf;
+
+            do
+            {
+                cout << "Input salary: "; cin >> strSalaryBuf;
+                errorFlag = makeStringDigit(strSalaryBuf, &salaryBuf);
+                if (errorFlag == -1)
+                    cout << "\nToo long number\n";
+                else if (errorFlag == 0)
+                    cout << "\nError input\n";
+            }
+            while(errorFlag != 1);
 
             Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
             Emploee::dataFileSearch dataFile;
@@ -404,12 +431,35 @@ int main()
         }
         else if (inputPoint == "2")
         {
-            string nameBuf, positionBuf;
-            int ageBuf, salaryBuf;
+            string nameBuf, positionBuf, strAgeBuf, strSalaryBuf;
+            int ageBuf = 0, salaryBuf = 0, errorFlag;
+
             cout << "Input name: "; cin >> nameBuf;
-            cout << "Input age: "; cin >> ageBuf;
+
+            do
+            {
+                cout << "Input age: "; cin >> strAgeBuf;
+                errorFlag = makeStringDigit(strAgeBuf, &ageBuf);
+                if (errorFlag == -1)
+                    cout << "\nToo long number\n";
+                else if (errorFlag == 0)
+                    cout << "\nError input\n";
+            }
+            while (errorFlag != 1);
+
             cout << "Input position: "; cin >> positionBuf;
-            cout << "Input salary: "; cin >> salaryBuf;
+
+            do
+            {
+                cout << "Input salary: "; cin >> strSalaryBuf;
+                errorFlag = makeStringDigit(strSalaryBuf, &salaryBuf);
+                if (errorFlag == -1)
+                    cout << "\nToo long number\n";
+                else if (errorFlag == 0)
+                    cout << "\nError input\n";
+            }
+            while(errorFlag != 1);
+
             Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
             Emploee::dataFileSearch dataFile;
             dataFile.deleteRecord(worker);
