@@ -49,6 +49,7 @@ protected:
     \brief working with emploees positions
 
     contain object Emploee with name, age, position and salary parameters
+    contain class for work with data file emploees
 */
 class Emploee: private Person
 {
@@ -138,7 +139,9 @@ public:
         }
 
         /*!
-         * \brief finds entries based on the entered age
+         * \brief finds entries based on the entered area age
+         *
+         * Search and show record that in [start, end] area
          */
         void searchRecordByAge(int startArea, int endArea)
         {
@@ -202,7 +205,9 @@ public:
         }
 
         /*!
-         * \brief finds entries based on the entered salary
+         * \brief finds entries based on the entered area salary
+         *
+         * Search and show record that in [start, end] area
          */
         void searchRecordBySalary(int startArea, int endArea)
         {
