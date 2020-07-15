@@ -340,11 +340,11 @@ private:
     int salary;
 };
 
-int main()
+class InteracrtiveMenu
 {
-    cout << "Welcome to BatExcel " << endl;
-    string inputPoint = "1"; ///<///<Digit in menu entered by the user
-    while (inputPoint != "5")
+public:
+
+    void printMenuPoints()
     {
         cout << "____________________________" << endl;
         cout << "1 - add position" << endl;
@@ -352,191 +352,241 @@ int main()
         cout << "3 - show all positions" << endl;
         cout << "4 - find position" << endl;
         cout << "5 - exit BatExcel" << endl;
+    }
+
+    void setInputPoint(string str)
+    {
+        inputPoint = str;
+    }
+
+    string getInputPoint()
+    {
+        return inputPoint;
+    }
+
+    void addPositionEmploee()
+    {
+        string nameBuf, positionBuf, strAgeBuf, strSalaryBuf;
+        int ageBuf = 0, salaryBuf = 0, errorFlag;
+
+        cout << "Input name: "; cin >> nameBuf;
+
+        do
+        {
+            cout << "Input age: "; cin >> strAgeBuf;
+            errorFlag = makeStringDigit(strAgeBuf, &ageBuf);
+            if (errorFlag == -1)
+                cout << "\nToo long number\n";
+            else if (errorFlag == 0)
+                cout << "\nError input\n";
+        }
+        while (errorFlag != 1);
+
+        cout << "Input position: "; cin >> positionBuf;
+
+        do
+        {
+            cout << "Input salary: "; cin >> strSalaryBuf;
+            errorFlag = makeStringDigit(strSalaryBuf, &salaryBuf);
+            if (errorFlag == -1)
+                cout << "\nToo long number\n";
+            else if (errorFlag == 0)
+                cout << "\nError input\n";
+        }
+        while(errorFlag != 1);
+
+        Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
+        Emploee::dataFileSearch dataFile;
+        dataFile.addRecord(worker);
+    }
+
+    void deletePositionEmploee()
+    {
+        string nameBuf, positionBuf, strAgeBuf, strSalaryBuf;
+        int ageBuf = 0, salaryBuf = 0, errorFlag;
+
+        cout << "Input name: "; cin >> nameBuf;
+
+        do
+        {
+            cout << "Input age: "; cin >> strAgeBuf;
+            errorFlag = makeStringDigit(strAgeBuf, &ageBuf);
+            if (errorFlag == -1)
+                cout << "\nToo long number\n";
+            else if (errorFlag == 0)
+                cout << "\nError input\n";
+        }
+        while (errorFlag != 1);
+
+        cout << "Input position: "; cin >> positionBuf;
+
+        do
+        {
+            cout << "Input salary: "; cin >> strSalaryBuf;
+            errorFlag = makeStringDigit(strSalaryBuf, &salaryBuf);
+            if (errorFlag == -1)
+                cout << "\nToo long number\n";
+            else if (errorFlag == 0)
+                cout << "\nError input\n";
+        }
+        while(errorFlag != 1);
+
+        Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
+        Emploee::dataFileSearch dataFile;
+        dataFile.deleteRecord(worker);
+    }
+
+    void showAllPositionsEmploee()
+    {
+        Emploee::dataFileSearch dataFile;
+        dataFile.showAllRecordsEmploee();
+    }
+
+    void findPositionEmploee()
+    {
+        string inputString;///<String entered by the user
+        /*!
+            \brief loop until the user enters the desired number
+        */
+        do
+        {
+            cout << "\nInput number by that you will search records\n";
+            cout << "1 - Name" << endl;
+            cout << "2 - Age" << endl;
+            cout << "3 - Position" << endl;
+            cout << "4 - Salary" << endl;
+            cout << "Number: "; cin >> inputString;
+            setInputPoint(inputString);
+            if ((inputPoint != "1") && (inputPoint != "2") &&
+                    (inputPoint != "3") && (inputPoint != "4"))
+                cout << "\nERROR INPUT\n";
+        }
+        while ((inputPoint != "1") && (inputPoint != "2") &&
+               (inputPoint != "3") && (inputPoint != "4"));
+
+        if (inputPoint == "1")
+            findPositionEmploeeByName();
+        else if (inputPoint == "2")
+            findPositionEmploeeByAge();
+        else if (inputPoint == "3")
+            findPositionEmploeeByWorkPosition();
+        else if (inputPoint == "4")
+            findPositionEmploeeBySalary();
+    }
+
+    void findPositionEmploeeByName()
+    {
+        string inputString;
+        Emploee::dataFileSearch dataFile;
+        cout << "Input string: "; cin >> inputString;
+        dataFile.setSearchString(inputString);
+        dataFile.searchRecordByName();
+    }
+
+    void findPositionEmploeeByAge()
+    {
+        Emploee::dataFileSearch dataFile;
+        int startArea, endArea, errorFlag;
+        string strStartArea, strEndArea;
+        do
+        {
+            cout << "Input start of area age: "; cin >> strStartArea;
+            errorFlag = makeStringDigit(strStartArea, &startArea);
+            if (errorFlag == -1)
+                cout << "\nToo long number\n";
+            else if (errorFlag == 0)
+                cout << "\nError input\n";
+        }
+        while (errorFlag != 1);
+
+        do
+        {
+            cout << "Input end of area age: "; cin >> strEndArea;
+            errorFlag = makeStringDigit(strEndArea, &endArea);
+            if (errorFlag == -1)
+                cout << "\nToo long number\n";
+            else if (errorFlag == 0)
+                cout << "\nError input\n";
+            if ((errorFlag == 1) && (endArea < startArea))
+            {
+                errorFlag = 2;
+                cout << "Wrong area (end of search < start search)" << endl;
+            }
+        }
+        while (errorFlag != 1);
+
+        dataFile.searchRecordByAge(startArea, endArea);
+    }
+
+    void findPositionEmploeeByWorkPosition()
+    {
+        string inputString;
+        Emploee::dataFileSearch dataFile;
+        cout << "Input string: "; cin >> inputString;
+        dataFile.setSearchString(inputString);
+        dataFile.searchRecordByPosition();
+    }
+
+    void findPositionEmploeeBySalary()
+    {
+        Emploee::dataFileSearch dataFile;
+        int startArea, endArea, errorFlag;
+        string strStartArea, strEndArea;
+        do
+        {
+            cout << "Input start of area salary: "; cin >> strStartArea;
+            errorFlag = makeStringDigit(strStartArea, &startArea);
+            if (errorFlag == -1)
+                cout << "\nToo long number\n";
+            else if (errorFlag == 0)
+                cout << "\nError input\n";
+        }
+        while (errorFlag != 1);
+
+        do
+        {
+            cout << "Input end of area salary: "; cin >> strEndArea;
+            errorFlag = makeStringDigit(strEndArea, &endArea);
+            if (errorFlag == -1)
+                cout << "\nToo long number\n";
+            else if (errorFlag == 0)
+                cout << "\nError input\n";
+            if ((errorFlag == 1) && (endArea < startArea))
+            {
+                errorFlag = 2;
+                cout << "Wrong area (end of search < start search)" << endl;
+            }
+        }
+        while (errorFlag != 1);
+
+        dataFile.searchRecordBySalary(startArea, endArea);
+    }
+
+private:
+    string inputPoint;
+};
+
+int main()
+{
+    cout << "Welcome to BatExcel " << endl;
+    string inputPoint = "1"; ///<///<Digit in menu entered by the user
+    while (inputPoint != "5")
+    {
+        InteracrtiveMenu mainMenu;
+        mainMenu.printMenuPoints();
         cout << "\nInput number of your choice: ";
         cin >> inputPoint;
-        /*!
-            \brief  Implementation of all actions depending on the selected number
-        */
-        if (inputPoint == "1")
-        {
-            string nameBuf, positionBuf, strAgeBuf, strSalaryBuf;
-            int ageBuf = 0, salaryBuf = 0, errorFlag;
-
-            cout << "Input name: "; cin >> nameBuf;
-
-            do
-            {
-                cout << "Input age: "; cin >> strAgeBuf;
-                errorFlag = makeStringDigit(strAgeBuf, &ageBuf);
-                if (errorFlag == -1)
-                    cout << "\nToo long number\n";
-                else if (errorFlag == 0)
-                    cout << "\nError input\n";
-            }
-            while (errorFlag != 1);
-
-            cout << "Input position: "; cin >> positionBuf;
-
-            do
-            {
-                cout << "Input salary: "; cin >> strSalaryBuf;
-                errorFlag = makeStringDigit(strSalaryBuf, &salaryBuf);
-                if (errorFlag == -1)
-                    cout << "\nToo long number\n";
-                else if (errorFlag == 0)
-                    cout << "\nError input\n";
-            }
-            while(errorFlag != 1);
-
-            Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
-            Emploee::dataFileSearch dataFile;
-            dataFile.addRecord(worker);
-
-        }
-        else if (inputPoint == "2")
-        {
-            string nameBuf, positionBuf, strAgeBuf, strSalaryBuf;
-            int ageBuf = 0, salaryBuf = 0, errorFlag;
-
-            cout << "Input name: "; cin >> nameBuf;
-
-            do
-            {
-                cout << "Input age: "; cin >> strAgeBuf;
-                errorFlag = makeStringDigit(strAgeBuf, &ageBuf);
-                if (errorFlag == -1)
-                    cout << "\nToo long number\n";
-                else if (errorFlag == 0)
-                    cout << "\nError input\n";
-            }
-            while (errorFlag != 1);
-
-            cout << "Input position: "; cin >> positionBuf;
-
-            do
-            {
-                cout << "Input salary: "; cin >> strSalaryBuf;
-                errorFlag = makeStringDigit(strSalaryBuf, &salaryBuf);
-                if (errorFlag == -1)
-                    cout << "\nToo long number\n";
-                else if (errorFlag == 0)
-                    cout << "\nError input\n";
-            }
-            while(errorFlag != 1);
-
-            Emploee worker(nameBuf, ageBuf, positionBuf, salaryBuf);
-            Emploee::dataFileSearch dataFile;
-            dataFile.deleteRecord(worker);
-        }
-        else if (inputPoint == "3")
-        {
-            Emploee::dataFileSearch dataFile;
-            dataFile.showAllRecordsEmploee();
-        }
-        else if (inputPoint == "4")
-        {
-            string inputString;///<String entered by the user
-            char inputPointStr;///<Digit entered by the user
-            /*!
-                \brief loop until the user enters the desired number
-            */
-            do
-            {
-                cout << "\nInput number by that you will search records\n";
-                cout << "1 - Name" << endl;
-                cout << "2 - Age" << endl;
-                cout << "3 - Position" << endl;
-                cout << "4 - Salary" << endl;
-                cout << "Number: "; cin >> inputPointStr;
-                if ((inputPointStr != '1') && (inputPointStr != '2') &&
-                        (inputPointStr != '3') && (inputPointStr != '4'))
-                    cout << "\nERROR INPUT\n";
-            }
-            while ((inputPointStr != '1') && (inputPointStr != '2') &&
-                   (inputPointStr != '3') && (inputPointStr != '4'));
-
-            Emploee::dataFileSearch dataFile;
-            if (inputPointStr == '1')
-            {
-                cout << "Input string: "; cin >> inputString;
-                dataFile.setSearchString(inputString);
-                dataFile.searchRecordByName();
-            }
-            else if (inputPointStr == '2')
-            {
-                int startArea, endArea, errorFlag;
-                string strStartArea, strEndArea;
-                do
-                {
-                    cout << "Input start of area age: "; cin >> strStartArea;
-                    errorFlag = makeStringDigit(strStartArea, &startArea);
-                    if (errorFlag == -1)
-                        cout << "\nToo long number\n";
-                    else if (errorFlag == 0)
-                        cout << "\nError input\n";
-                }
-                while (errorFlag != 1);
-
-                do
-                {
-                    cout << "Input end of area age: "; cin >> strEndArea;
-                    errorFlag = makeStringDigit(strEndArea, &endArea);
-                    if (errorFlag == -1)
-                        cout << "\nToo long number\n";
-                    else if (errorFlag == 0)
-                        cout << "\nError input\n";
-                    if ((errorFlag == 1) && (endArea < startArea))
-                    {
-                        errorFlag = 2;
-                        cout << "Wrong area (end of search < start search)" << endl;
-                    }
-                }
-                while (errorFlag != 1);
-
-                dataFile.searchRecordByAge(startArea, endArea);
-            }
-            else if (inputPointStr == '3')
-            {
-                cout << "Input string: "; cin >> inputString;
-                dataFile.setSearchString(inputString);
-                dataFile.searchRecordByPosition();
-            }
-            else if (inputPointStr == '4')
-            {
-                int startArea, endArea, errorFlag;
-                string strStartArea, strEndArea;
-                do
-                {
-                    cout << "Input start of area salary: "; cin >> strStartArea;
-                    errorFlag = makeStringDigit(strStartArea, &startArea);
-                    if (errorFlag == -1)
-                        cout << "\nToo long number\n";
-                    else if (errorFlag == 0)
-                        cout << "\nError input\n";
-                }
-                while (errorFlag != 1);
-
-                do
-                {
-                    cout << "Input end of area salary: "; cin >> strEndArea;
-                    errorFlag = makeStringDigit(strEndArea, &endArea);
-                    if (errorFlag == -1)
-                        cout << "\nToo long number\n";
-                    else if (errorFlag == 0)
-                        cout << "\nError input\n";
-                    if ((errorFlag == 1) && (endArea < startArea))
-                    {
-                        errorFlag = 2;
-                        cout << "Wrong area (end of search < start search)" << endl;
-                    }
-                }
-                while (errorFlag != 1);
-
-                dataFile.searchRecordBySalary(startArea, endArea);
-            }
-        }
-        else if (inputPoint != "5")
-            cout << "\nIncorrect input" << endl;
+        mainMenu.setInputPoint(inputPoint);
+        if (mainMenu.getInputPoint() == "1")
+            mainMenu.addPositionEmploee();
+        else if (mainMenu.getInputPoint() == "2")
+            mainMenu.deletePositionEmploee();
+        else if (mainMenu.getInputPoint() == "3")
+            mainMenu.showAllPositionsEmploee();
+        else if (mainMenu.getInputPoint() == "4")
+            mainMenu.findPositionEmploee();
+        else
+            cout << endl << "Incorrect input" << endl;
     }
     return 0;
 }
